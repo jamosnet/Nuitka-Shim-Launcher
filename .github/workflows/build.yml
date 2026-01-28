@@ -29,12 +29,12 @@ jobs:
         REM /DUNICODE /D_UNICODE: 使用 Unicode 字符集 (支持中文路径)
         REM user32.lib: 用于 MessageBox 等窗口函数
         
-        cl.exe /O2 /DUNICODE /D_UNICODE launcher.cpp launcher.res /Fe:MonitorApp.exe user32.lib
+        cl.exe /O2 /DUNICODE /D_UNICODE launcher.cpp launcher.res /Fe:Shim.exe user32.lib
         
         dir
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Shim
+        name: Nuitka-Shim-Launcher
         path: Shim.exe
