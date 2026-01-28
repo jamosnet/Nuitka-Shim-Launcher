@@ -1,0 +1,40 @@
+name: Build Launcher
+
+on:
+  push:
+    paths:
+      - 'launcher.cpp'
+      - 'launcher.rc'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Compile Resources
+      run: |
+        rc.exe /fo launcher.res launcher.rc
+
+    - name: Compile & Link
+      shell: cmd
+      run: |
+        REM 编译 C++ 并链接资源文件
+        REM /Fe: 输出文件名
+        REM /DUNICODE /D_UNICODE: 使用 Unicode 字符集 (支持中文路径)
+        REM user32.lib: 用于 MessageBox 等窗口函数
+        
+        cl.exe /O2 /DUNICODE /D_UNICODE launcher.cpp launcher.res /Fe:MonitorApp.exe user32.lib
+        
+        dir
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Shim
+        path: Shim.exe
